@@ -6,6 +6,7 @@
 # author: mutantmonkey <mutantmonkey@gmail.com>
 ################################################################################
 
+import sys
 import ldap
 
 LDAP_URI = "ldap://directory.vt.edu"
@@ -71,14 +72,15 @@ def search(query):
 
 	return True
 
-q = 'presidente'
+querybits = sys.argv[1:]
+q = " ".join(querybits)
 
 # initially try search by PID
 s = search('uupid=%s' % q)
 
 # try partial search on CN if no results found for PID
 if not s:
-	s = search('cn=*%s*' % q)
+	s = search('cn=*%s*' % "*".join(querybits))
 
 # try email address if no results found for PID or CN
 if not s:
