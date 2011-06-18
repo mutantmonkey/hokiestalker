@@ -1,8 +1,10 @@
 #!/usr/bin/python2
 ################################################################################
 # hs.py - Hokie Stalker
-# Query the Virginia Tech LDAP server for information about a person
+# Query the Virginia Tech LDAP server for information about a person.
+# Licensed under the New BSD License.
 #
+# https://github.com/mutantmonkey/hokiestalker
 # author: mutantmonkey <mutantmonkey@gmail.com>
 ################################################################################
 
