@@ -1,4 +1,6 @@
-# Hokie Stalker #
+Hokie Stalker
+=============
+
 Query the Virginia Tech LDAP server for information about a person.
 Licensed under the New BSD License.
 
