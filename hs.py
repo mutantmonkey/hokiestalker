@@ -74,20 +74,25 @@ def search(query):
 
 	return True
 
-querybits = sys.argv[1:]
-q = " ".join(querybits)
+try:
+	q = sys.argv[1:]
+	if q[0] == '-n':
+		q = sys.argv[2:]
+		s = False
+	else:
+		# initially try search by PID
+		s = search('uupid=%s' % q[0])
 
-# initially try search by PID
-s = search('uupid=%s' % q)
+	# try partial search on CN if no results found for PID
+	if not s:
+		s = search('cn=*%s*' % "*".join(q))
 
-# try partial search on CN if no results found for PID
-if not s:
-	s = search('cn=*%s*' % "*".join(querybits))
+	# try email address if no results found for PID or CN
+	if not s:
+		s = search('mail=%s*' % q[0])
 
-# try email address if no results found for PID or CN
-if not s:
-	s = search('mail=%s*' % q)
-
-if not s:
-	print "No results found"
+	if not s:
+		print "No results found"
+except ldap.SIZELIMIT_EXCEEDED:
+	print "Error: Size limit exceeded; please refine your query"
 
