@@ -76,7 +76,10 @@ def search(query):
 
 try:
     q = sys.argv[1:]
-    if not search('(|(uupid=*{0}*)(mail=*{0}*)(cn=*{1}*))'.format( q[0], ' '.join(q))):
+    s = search('(|(uupid={0})(mail={0})(cn={1}))'.format( q[0], ' '.join(q)))
+    if not s:
+        s = search('(|(uupid=*{0}*)(mail=*{0}*)(cn=*{1}*))'.format( q[0], ' '.join(q)))
+    if not s:
         print "No results found"
 except ldap.SIZELIMIT_EXCEEDED:
     print "Error: Size limit exceeded; please refine your query"

@@ -17,5 +17,4 @@ There is a [Ruby Port](https://github.com/benwr/hokiestalker) available, written
 4. Profit!
 
 ## Usage ##
-* Search by PID, name, or email address (in that order): `hs <pid/name/email>`
-* Search by name or email address only: `hs <name/email>`
+* Search by PID, name, or email address: `hs <pid/name/email>`
