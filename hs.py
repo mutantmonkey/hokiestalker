@@ -1,90 +1,112 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 ################################################################################
 # hs.py - Hokie Stalker
-# Query the Virginia Tech LDAP server for information about a person.
+# Query the Virginia Tech people search for information about a person.
 # Licensed under the New BSD License.
 #
 # https://github.com/mutantmonkey/hokiestalker
-# author: mutantmonkey <mutantmonkey@gmail.com>
+# author: mutantmonkey <mutantmonkey@mutantmonkey.in>
 ################################################################################
 
 import sys
-import ldap
+import lxml.etree
+import urllib.request
 
-LDAP_URI = "ldap://directory.vt.edu"
+SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?query={0}&dsml-version=2"
+NS = '{urn:oasis:names:tc:DSML:2:0:core}'
 
-l = ldap.initialize(LDAP_URI)
+rows = []
 
 """Return a formatted row for printing."""
 def row(name, data):
-    out = "%-20s%s" % (name + ":", data[0])
+    if data is None:
+        return
 
-    # print additional lines if necessary, trimming off the first row
-    if len(data) > 1:
-        for line in data[1:]:
-            out += "\n%20s%s" % ('', line)
+    if type(data) == str:
+        rows.append("{0:20s}{1}".format(name + ':', data))
+    else:
+        rows.append("{0:20s}{1}".format(name + ':', data[0]))
 
-    return out
+        # print additional lines if necessary, trimming off the first row
+        if len(data) > 1:
+            for line in data[1:]:
+                rows.append("{0:20s}{1}".format('', line))
 
 """Parse the address from an LDAP response where $ is used to separate lines."""
 def parse_addr(data):
-    addr = data[0].split('$')
+    if data is None:
+        return None
+    addr = data.split('$')
     return addr
+
+"""Check if the current attribute has the desired key."""
+def is_attr(attr, key):
+    return attr.attrib['name'] == key
 
 """Search LDAP using the argument as a query. Argument must be a valid LDAP query."""
 def search(query):
-    result = l.search_s('ou=People,dc=vt,dc=edu', ldap.SCOPE_SUBTREE, query)
-    if len(result) <= 0:
+    r = urllib.request.Request(SEARCH_URL.format(query), headers={
+        'User-agent' : 'hokiestalker/2.0',
+        })
+    f = urllib.request.urlopen(r)
+
+    xml = lxml.etree.parse(f)
+    results = xml.findall('{0}searchResponse/{0}searchResultEntry'.format(NS))
+
+    if len(results) <= 0:
         return False
 
-    for dn, entry in result:
-        print row('Name', entry['cn'])
-        print row('UID', entry['uid'])
+    for entry in results:
+        entry_data = {}
+        for attr in entry:
+            entry_data[attr.attrib['name']] = attr[0].text
 
-        if 'uupid' in entry:
-            print row('PID', entry['uupid'])
+        if 'displayName' in entry_data:
+            row('Name', entry_data['displayName'])
 
-        if 'major' in entry:
-            print row('Major', entry['major'])
-        elif 'department' in entry:
-            print row('Department', entry['department'])
+        if 'uid' in entry_data:
+            row('UID', entry_data['uid'])
 
-        if 'title' in entry:
-            print row('Title', entry['title'])
+        if 'uupid' in entry_data:
+            row('PID', entry_data['uupid'])
 
-        if 'postalAddress' in entry:
-            print row('Office', parse_addr(entry['postalAddress']))
+        if 'major' in entry_data:
+            row('Major', entry_data['major'])
+        elif 'department' in entry_data:
+            row('Department', entry_data['department'])
 
-        if 'mailStop' in entry:
-            print row('Mail Stop', entry['mailStop'])
+        if 'title' in entry_data:
+            row('Title', entry_data['title'])
 
-        if 'telephoneNumber' in entry:
-            print row('Office Phone', entry['telephoneNumber'])
+        if 'postalAddress' in entry_data:
+            row('Office', parse_addr(entry_data['postalAddress']))
 
-        if 'localPostalAddress' in entry:
-            print row('Mailing Address', parse_addr(entry['localPostalAddress']))
+        if 'mailStop' in entry_data:
+            row('Mail Stop', entry_data['mailStop'])
 
-        if 'localPhone' in entry:
-            print row('Phone Number', entry['localPhone'])
+        if 'telephoneNumber' in entry_data:
+            row('Office Phone', entry_data['telephoneNumber'])
 
-        if 'mail' in entry:
-            print row('Email Address', entry['mail'])
+        if 'localPostalAddress' in entry_data:
+            row('Mailing Address', parse_addr(entry_data['localPostalAddress']))
 
-        print 
+        if 'localPhone' in entry_data:
+            row('Phone Number', entry_data['localPhone'])
+
+        if 'mail' in entry_data:
+            row('Email Address', entry_data['mail'])
+
+        print("\n".join(rows))
+        del rows[:]
+
+        if entry.getnext() is not None and entry.getnext().tag != \
+                '{0}searchResultDone'.format(NS):
+            print()
 
     return True
 
-try:
-    q = sys.argv[1:]
-    if sys.argv[1] == '-n':
-        s = search('cn=*{0}*'.format('*'.join(sys.argv[2:])))
-    else:
-        s = search('(|(uupid={0})(mail={0})(cn={1}))'.format(q[0], ' '.join(q)))
-        if not s:
-            s = search('(|(uupid=*{0}*)(mail=*{0}*)(cn=*{1}*))'.format(q[0], '*'.join(q)))
+q = sys.argv[1:]
+s = search(' '.join(q))
 
-    if not s:
-        print "No results found"
-except ldap.SIZELIMIT_EXCEEDED:
-    print "Error: Size limit exceeded; please refine your query"
-
+if not s:
+    print("No results found")
