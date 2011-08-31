@@ -11,10 +11,11 @@ There is a [Ruby Port](https://github.com/benwr/hokiestalker) available, written
 * [python-ldap](http://www.python-ldap.org/)
 
 ## Installation ##
-1. Clone repository
-2. Symlink /usr/bin/hs to hs.py in this repository.
+1. `git clone git://github.com/mutantmonkey/hokiestalker.git`
+2. `ln -s /path/to/hokiestalker/hs.py /usr/bin/hs`
 3. ???
 4. Profit!
 
 ## Usage ##
 * Search by PID, name, or email address: `hs <pid/name/email>`
+* Search by name only: `hs <name>`
