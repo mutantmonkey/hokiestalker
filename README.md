@@ -1,14 +1,16 @@
 Hokie Stalker
 =============
 
-Query the Virginia Tech LDAP server for information about a person.
+Query the Virginia Tech people search service for information about a person.
 Licensed under the New BSD License.
 
-There is a [Ruby port](https://github.com/benwr/hokiestalker) available, written by benwr. I have shamelessly ported some of his additional features back to my Python version.
+There is a [Ruby port](https://github.com/benwr/hokiestalker) available,
+written by benwr. I have shamelessly ported some of his additional features
+back to my Python version.
 
 ## Prerequisites ##
-* Python 2.7
-* [python-ldap](http://www.python-ldap.org/)
+* Python 3
+* [lxml](http://lxml.de/)
 
 ## Installation ##
 1. `git clone git://github.com/mutantmonkey/hokiestalker.git`
@@ -18,4 +20,3 @@ There is a [Ruby port](https://github.com/benwr/hokiestalker) available, written
 
 ## Usage ##
 * Search by PID, name, or email address: `hs <pid/name/email>`
-* Search by name only: `hs -n <name>`
