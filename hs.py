@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 ################################################################################
 # hs.py - Hokie Stalker
-# Query the Virginia Tech people search for information about a person.
+# Query the Virginia Tech people search service for information about a person.
 # Licensed under the New BSD License.
 #
 # https://github.com/mutantmonkey/hokiestalker
