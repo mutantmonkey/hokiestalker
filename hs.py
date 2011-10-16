@@ -10,6 +10,7 @@
 
 import sys
 import lxml.etree
+import urllib.parse
 import urllib.request
 
 SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?query={0}&dsml-version=2"
@@ -45,6 +46,7 @@ def is_attr(attr, key):
 
 """Search LDAP using the argument as a query. Argument must be a valid LDAP query."""
 def search(query):
+    query = urllib.parse.quote(query)
     r = urllib.request.Request(SEARCH_URL.format(query), headers={
         'User-agent' : 'hokiestalker/2.0',
         })
