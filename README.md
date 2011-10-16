@@ -9,7 +9,7 @@ written by benwr. I have shamelessly ported some of his additional features
 back to my Python version.
 
 ## Prerequisites ##
-* Python 3
+* Python 3.x
 * [lxml](http://lxml.de/)
 
 ## Installation ##
