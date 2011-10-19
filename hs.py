@@ -63,8 +63,14 @@ def search(query):
         for attr in entry:
             entry_data[attr.attrib['name']] = attr[0].text
 
+        names = []
         if 'displayName' in entry_data:
-            row('Name', entry_data['displayName'])
+            names.append(entry_data['displayName'])
+
+        if 'cn' in entry_data:
+            names.append(entry_data['cn'])
+
+        row('Name', names)
 
         if 'uid' in entry_data:
             row('UID', entry_data['uid'])
