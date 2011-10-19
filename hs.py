@@ -67,8 +67,9 @@ def search(query):
         if 'displayName' in entry_data:
             names.append(entry_data['displayName'])
 
-        if 'cn' in entry_data:
-            names.append(entry_data['cn'])
+        if 'sn' in entry_data:
+            names.append('{0} {1} {2}'.format(entry_data['givenName'],
+                entry_data['middleName'], entry_data['sn']))
 
         row('Name', names)
 
