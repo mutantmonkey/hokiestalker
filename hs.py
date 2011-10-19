@@ -63,13 +63,19 @@ def search(query):
         for attr in entry:
             entry_data[attr.attrib['name']] = attr[0].text
 
+        print(entry_data)
+
         names = []
         if 'displayName' in entry_data:
             names.append(entry_data['displayName'])
 
-        if 'sn' in entry_data:
-            names.append('{0} {1} {2}'.format(entry_data['givenName'],
-                entry_data['middleName'], entry_data['sn']))
+        if 'givenName' in entry_data and 'sn' in entry_data:
+            if 'middleName' in entry_data:
+                names.append('{0} {1} {2}'.format(entry_data['givenName'],
+                    entry_data['middleName'], entry_data['sn']))
+            else:
+                names.append('{0} {1}'.format(entry_data['givenName'],
+                    entry_data['sn']))
 
         row('Name', names)
 
