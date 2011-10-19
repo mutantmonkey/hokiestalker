@@ -63,8 +63,6 @@ def search(query):
         for attr in entry:
             entry_data[attr.attrib['name']] = attr[0].text
 
-        print(entry_data)
-
         names = []
         if 'displayName' in entry_data:
             names.append(entry_data['displayName'])
