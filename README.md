@@ -2,7 +2,7 @@ Hokie Stalker
 =============
 
 Query the Virginia Tech people search service for information about a person.
-Licensed under the New BSD License.
+Licensed under the ISC License.
 
 There is a [Ruby port](https://github.com/benwr/hokiestalker) available,
 written by benwr. I have shamelessly ported some of his additional features

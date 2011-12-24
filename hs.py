@@ -2,7 +2,7 @@
 ################################################################################
 # hs.py - Hokie Stalker
 # Query the Virginia Tech people search service for information about a person.
-# Licensed under the New BSD License.
+# Licensed under the ISC License.
 #
 # https://github.com/mutantmonkey/hokiestalker
 # author: mutantmonkey <mutantmonkey@mutantmonkey.in>
