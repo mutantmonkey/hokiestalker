@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-################################################################################
+###############################################################################
 # hs.py - Hokie Stalker
 # Query the Virginia Tech people search service for information about a person.
 # Licensed under the ISC License.
 #
 # https://github.com/mutantmonkey/hokiestalker
 # author: mutantmonkey <mutantmonkey@mutantmonkey.in>
-################################################################################
+###############################################################################
 
 import sys
 import lxml.etree
@@ -16,10 +16,12 @@ import urllib.request
 __author__ = 'mutantmonkey'
 __license__ = 'ISC'
 
-SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?query={0}&dsml-version=2"
+SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?"\
+        "query={0}&dsml-version=2"
 NS = '{urn:oasis:names:tc:DSML:2:0:core}'
 
 rows = []
+
 
 """Return a formatted row for printing."""
 def row(name, data):
@@ -36,7 +38,7 @@ def row(name, data):
             for line in data[1:]:
                 rows.append("{0:20s}{1}".format('', line))
 
-"""Parse the address from an LDAP response where $ is used to separate lines."""
+"""Parse the address from an LDAP response when $ is used to separate lines."""
 def parse_addr(data):
     if data is None:
         return None
@@ -47,11 +49,12 @@ def parse_addr(data):
 def is_attr(attr, key):
     return attr.attrib['name'] == key
 
-"""Search LDAP using the argument as a query. Argument must be a valid LDAP query."""
+"""Search LDAP using the argument as a query. Argument must be a valid LDAP
+   query."""
 def search(query):
     query = urllib.parse.quote(query)
     r = urllib.request.Request(SEARCH_URL.format(query), headers={
-        'User-agent' : 'hokiestalker/2.0',
+        'User-agent': 'hokiestalker/2.0',
         })
     f = urllib.request.urlopen(r)
 
@@ -104,7 +107,8 @@ def search(query):
             row('Office Phone', entry_data['telephoneNumber'])
 
         if 'localPostalAddress' in entry_data:
-            row('Mailing Address', parse_addr(entry_data['localPostalAddress']))
+            row('Mailing Address', parse_addr(
+                entry_data['localPostalAddress']))
 
         if 'localPhone' in entry_data:
             row('Phone Number', entry_data['localPhone'])
