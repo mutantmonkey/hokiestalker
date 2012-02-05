@@ -121,8 +121,9 @@ def search(query):
 
     return True
 
-q = sys.argv[1:]
-s = search(' '.join(q))
+if __name__ == '__main__':
+    q = sys.argv[1:]
+    s = search(' '.join(q))
 
-if not s:
-    print("No results found")
+    if not s:
+        print("No results found")
