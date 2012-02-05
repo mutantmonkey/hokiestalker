@@ -13,6 +13,9 @@ import lxml.etree
 import urllib.parse
 import urllib.request
 
+__author__ = 'mutantmonkey'
+__license__ = 'ISC'
+
 SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?query={0}&dsml-version=2"
 NS = '{urn:oasis:names:tc:DSML:2:0:core}'
 
