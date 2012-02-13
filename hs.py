@@ -13,7 +13,7 @@ import lxml.etree
 import urllib.parse
 import urllib.request
 
-__author__ = 'mutantmonkey'
+__author__ = 'mutantmonkey <mutantmonkey@mutantmonkey.in>'
 __license__ = 'ISC'
 
 SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?"\
