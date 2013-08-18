@@ -2,7 +2,7 @@ Hokie Stalker
 =============
 
 Query the Virginia Tech people search service for information about a person.
-Licensed under the ISC License.
+Available under the ISC License.
 
 There is a [Ruby port](https://github.com/benwr/hokiestalker) available,
 written by benwr. I have shamelessly ported some of his additional features
@@ -16,7 +16,7 @@ Prerequisites
 Installation
 ------------
 1. `git clone git://github.com/mutantmonkey/hokiestalker.git`
-2. `ln -s /path/to/hokiestalker/hs.py /usr/bin/hs`
+2. `python setup.py install`
 3. ???
 4. Profit!
 
