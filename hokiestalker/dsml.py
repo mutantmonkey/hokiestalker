@@ -5,7 +5,13 @@ class DSMLParser(object):
     namespace = '{http://www.dsml.org/DSML}'
 
     def __init__(self, f):
-        xml = lxml.etree.parse(f)
+        try:
+            xml = lxml.etree.parse(f)
+        except lxml.etree.XMLSyntaxError:
+            # if there is a syntax error, return an empty result iterator
+            self.results = iter([])
+            return
+
         self.results = xml.iterfind('{0}directory-entries/{0}entry'.format(
             self.namespace))
 
