@@ -98,8 +98,8 @@ def search(query):
         if hasattr(entry, 'localPhone'):
             row(rows, 'Phone Number', entry.localPhone)
 
-        if hasattr(entry, 'mail'):
-            row(rows, 'Email Address', entry.mail)
+        if hasattr(entry, 'mailPreferredAddress'):
+            row(rows, 'Email Address', entry.mailPreferredAddress)
 
         print("\n".join(rows))
         print()
