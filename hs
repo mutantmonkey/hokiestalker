@@ -70,37 +70,37 @@ def search(query):
         row(rows, 'Name', names)
 
         if jhasattr(entry, 'uid'):
-            row(rows, 'UID', entry.get("uid"))
+            row(rows, 'UID', entry.get("uid")[0])
 
         if jhasattr(entry, 'uupid'):
-            row(rows, 'PID', entry.get("uupid"))
+            row(rows, 'PID', entry.get("uupid")[0])
 
         if jhasattr(entry, 'major'):
-            row(rows, 'Major', entry.get("major"))
+            row(rows, 'Major', entry.get("major")[0])
         elif jhasattr(entry, 'department'):
             row(rows, 'Department', entry.get("department"))
 
         if jhasattr(entry, 'title'):
-            row(rows, 'Title', entry.get("title"))
+            row(rows, 'Title', entry.get("title")[0])
 
         if jhasattr(entry, 'postalAddress'):
             row(rows, 'Office', parse_addr(entry.get("postalAddress")[0]))
 
         if jhasattr(entry, 'mailStop'):
-            row(rows, 'Mail Stop', entry.get("mailStop"))
+            row(rows, 'Mail Stop', entry.get("mailStop")[0])
 
         if jhasattr(entry, 'telephoneNumber'):
-            row(rows, 'Office Phone', entry.get("telephoneNumber"))
+            row(rows, 'Office Phone', entry.get("telephoneNumber")[0])
 
         if jhasattr(entry, 'localPostalAddress'):
             row(rows, 'Mailing Address', parse_addr(
-                entry.get("localPostalAddress")))
+                entry.get("localPostalAddress")[0]))
 
         if jhasattr(entry, 'localPhone'):
-            row(rows, 'Phone Number', entry.get("localPhone"))
+            row(rows, 'Phone Number', entry.get("localPhone")[0])
 
         if jhasattr(entry, 'mailPreferredAddress'):
-            row(rows, 'Email Address', entry.get("mailPreferredAddress"))
+            row(rows, 'Email Address', entry.get("mailPreferredAddress")[0])
 
         print("\n".join(rows))
         print()
