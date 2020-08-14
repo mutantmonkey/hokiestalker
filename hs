@@ -11,13 +11,12 @@
 import sys
 import urllib.parse
 import urllib.request
+import json
 
-from hokiestalker import dsml
 from hokiestalker import parse_addr
 
-SEARCH_URL = "https://webapps.middleware.vt.edu/peoplesearch/PeopleSearch?"\
-    "query={0}&dsml-version=2"
-
+SEARCH_URL = "https://apps.middleware.vt.edu/ws/v1/persons/ldap/fuzzysearch?"\
+    "query={0}"
 
 def row(rows, name, data):
     """Return a formatted row for printing."""
@@ -34,6 +33,8 @@ def row(rows, name, data):
             for line in data[1:]:
                 rows.append("{0:20s}{1}".format('', line))
 
+def jhasattr(obj, attr):
+    return attr in obj.keys()
 
 def search(query):
     """Search LDAP using the argument as a query. Argument must be
@@ -45,61 +46,61 @@ def search(query):
     f = urllib.request.urlopen(r)
 
     has_results = False
-    results = dsml.DSMLParser(f)
+    results = json.loads(f.read())
 
     for entry in results:
         has_results = True
 
         rows = []
         names = []
-        if hasattr(entry, 'displayName'):
-            names.append(entry.displayName)
+        if jhasattr(entry, 'displayName'):
+            names.append(entry.get("displayName")[0])
 
-        if hasattr(entry, 'givenName') and hasattr(entry, 'sn'):
-            if hasattr(entry, 'middleName'):
+        if jhasattr(entry, 'givenName') and jhasattr(entry, 'sn'):
+            if jhasattr(entry, 'middleName'):
                 names.append('{0} {1} {2}'.format(
-                    entry.givenName,
-                    entry.middleName,
-                    entry.sn))
+                    entry.get("givenName")[0],
+                    entry.get("middleName")[0],
+                    entry.get("sn")[0]))
             else:
                 names.append('{0} {1}'.format(
-                    entry.givenName,
-                    entry.sn))
+                    entry.get("givenName")[0],
+                    entry.get("sn")[0]))
 
         row(rows, 'Name', names)
 
-        if hasattr(entry, 'uid'):
-            row(rows, 'UID', entry.uid)
+        if jhasattr(entry, 'uid'):
+            row(rows, 'UID', entry.get("uid")[0])
 
-        if hasattr(entry, 'uupid'):
-            row(rows, 'PID', entry.uupid)
+        if jhasattr(entry, 'uupid'):
+            row(rows, 'PID', entry.get("uupid")[0])
 
-        if hasattr(entry, 'major'):
-            row(rows, 'Major', entry.major)
-        elif hasattr(entry, 'department'):
-            row(rows, 'Department', entry.department)
+        if jhasattr(entry, 'major'):
+            row(rows, 'Major', entry.get("major")[0])
+        elif jhasattr(entry, 'department'):
+            row(rows, 'Department', entry.get("department"))
 
-        if hasattr(entry, 'title'):
-            row(rows, 'Title', entry.title)
+        if jhasattr(entry, 'title'):
+            row(rows, 'Title', entry.get("title")[0])
 
-        if hasattr(entry, 'postalAddress'):
-            row(rows, 'Office', parse_addr(entry.postalAddress))
+        if jhasattr(entry, 'postalAddress'):
+            row(rows, 'Office', parse_addr(entry.get("postalAddress")[0]))
 
-        if hasattr(entry, 'mailStop'):
-            row(rows, 'Mail Stop', entry.mailStop)
+        if jhasattr(entry, 'mailStop'):
+            row(rows, 'Mail Stop', entry.get("mailStop")[0])
 
-        if hasattr(entry, 'telephoneNumber'):
-            row(rows, 'Office Phone', entry.telephoneNumber)
+        if jhasattr(entry, 'telephoneNumber'):
+            row(rows, 'Office Phone', entry.get("telephoneNumber")[0])
 
-        if hasattr(entry, 'localPostalAddress'):
+        if jhasattr(entry, 'localPostalAddress'):
             row(rows, 'Mailing Address', parse_addr(
-                entry.localPostalAddress))
+                entry.get("localPostalAddress")[0]))
 
-        if hasattr(entry, 'localPhone'):
-            row(rows, 'Phone Number', entry.localPhone)
+        if jhasattr(entry, 'localPhone'):
+            row(rows, 'Phone Number', entry.get("localPhone")[0])
 
-        if hasattr(entry, 'mailPreferredAddress'):
-            row(rows, 'Email Address', entry.mailPreferredAddress)
+        if jhasattr(entry, 'mailPreferredAddress'):
+            row(rows, 'Email Address', entry.get("mailPreferredAddress")[0])
 
         print("\n".join(rows))
         print()
