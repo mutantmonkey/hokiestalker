@@ -15,7 +15,7 @@ import json
 
 from hokiestalker import parse_addr
 
-SEARCH_URL = "https://apps.middleware.vt.edu/ws/v1/persons/ldap/fuzzysearch?"\
+SEARCH_URL = "https://apps.middleware.vt.edu/v1/persons/ldap/fuzzysearch?"\
     "query={0}"
 
 def row(rows, name, data):
